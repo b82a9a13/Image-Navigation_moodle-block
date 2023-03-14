@@ -1,0 +1,11 @@
+.nav-div{
+    width: 100%;
+}
+.input-link{
+    display: flex;
+    justify-content: center;
+}
+.preview_img{
+    cursor: pointer;
+    margin: .25rem;
+}

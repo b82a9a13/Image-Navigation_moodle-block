@@ -7,8 +7,9 @@
         <h2 id="{{role}}_success_message" class="text-success"></h2>
     </div>
     <form id="{{role}}_form" method="POST" action="./classes/inc/configuration.inc.php" enctype="multipart/form-data">
-        <div id="{{role}}_image_div">
-            <div id="{{role}}_settings">
+        <div id="{{role}}_image_div" class="image-div-outer">
+            <div id="{{role}}_settings" class="image-div-inner">
+                <h3>Settings</h3>
                 <p>
                     {{img_pix_width}}
                     <input type="number" name="imagewidth" onchange="widthchange('{{role}}')" id="{{role}}_image_width" value="{{width}}">
@@ -23,8 +24,8 @@
                 </p>
             </div>
             {{#array}}
-            <div id="{{role}}_image_{{0}}" class="{{role}}_image">
-                <p>{{0}}</p>
+            <div id="{{role}}_image_{{0}}" class="{{role}}_image image-div-inner">
+                <h3>{{0}}</h3>
                 <img id="{{role}}_the_image{{0}}" class="{{role}}_imagenav" style="width: {{width}}px; height: {{height}}px; {{3}}" src="{{2}}">
                 <div>
                     <input type="file" name="file{{0}}" id="{{role}}_file{{0}}" onchange="newfile('{{role}}',{{0}})" class="{{role}}-files"><br>
@@ -34,6 +35,7 @@
                             <input type="url" name="link{{0}}" id="{{role}}_link{{0}}" class="{{role}}-links" value="{{1}}" onchange="newurl('{{role}}', {{0}})">
                         </p>
                     </div>
+                    <button type="button" class="btn-danger btn" id="{{role}}_delbtn{{0}}" onclick="deleteimage('{{role}}',{{0}})">Delete</button>
                 </div>
             </div>
             {{/array}}

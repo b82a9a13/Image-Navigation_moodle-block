@@ -24,5 +24,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_imagenav';
-$plugin->version = 17;
+$plugin->version = 18;
 $plugin->requires = 2016052314; // Moodle version

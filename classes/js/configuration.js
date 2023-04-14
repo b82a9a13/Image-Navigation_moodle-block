@@ -14,10 +14,10 @@ function navbtn(string){
 function newimage(string){
     const adminimages = document.querySelectorAll('.'+string+'_image')
     const div = document.createElement("div")
-    div.className = string+'_image'
+    div.className = string+'_image image-div-inner'
     const number = adminimages.length + 1
     div.id = string+'_image_'+number
-    const position = document.createElement('p')
+    const position = document.createElement('h3')
     position.innerText = `${number}`
     div.appendChild(position)
     const image = document.createElement('img')
@@ -43,10 +43,17 @@ function newimage(string){
     input2.id = string+'_link'+number
     input2.className = string+'-links'
     input2.setAttribute('onchange', "newurl('"+string+"', "+number+")")
+    const delbtn = document.createElement("button")
+    delbtn.innerText = 'Delete'
+    delbtn.type = 'button'
+    delbtn.id = string+'_delbtn'+number
+    delbtn.className = 'btn-danger btn'
+    delbtn.setAttribute('onclick', "deleteimage('"+string+"',"+number+")")
     p.appendChild(input2)
     div2.appendChild(p)
     div3.appendChild(div2)
     div.appendChild(div3)
+    div.appendChild(delbtn)
     document.getElementById(string+'_image_div').appendChild(div)
     document.getElementById(string+'_image_total').setAttribute("value", number)
     refreshpreview(string)
@@ -319,5 +326,48 @@ function formsubmit(string){
             }
         }
         fxhr.send(formData)
+    }
+}
+function deleteimage(string, number){
+    const image = document.getElementById(string+'_the_image'+number)
+    const input = document.getElementById(string+'_link'+number)
+    if(image.src == '' && input.value == ''){
+        const totalImages = document.querySelectorAll("."+string+"_image").length
+        const maxValue = document.getElementById(string+'_image_total').getAttribute('value');
+        if(totalImages == number){
+            document.getElementById(string+'_image_'+number).remove()
+            document.getElementById(string+'_image_total').setAttribute('value', maxValue-1)
+        } else if(totalImages > number){
+            document.getElementById(string+'_image_'+number).remove()
+            const afterNum = totalImages - number;
+            for(let i = 1; i < (afterNum+1); i++){
+                const div = document.getElementById(string+'_image_'+(maxValue-(i-1)))
+                div.querySelector('h3').innerText = maxValue - i
+                div.querySelector('img').id = string+"_the_image"+(maxValue-i)
+                div.id = string+'_image_'+(maxValue-i)
+                const fileInput = document.getElementById(string+"_file"+(maxValue-(i-1)))
+                fileInput.setAttribute('onchange', "newfile('"+string+"', "+(maxValue-i)+")")
+                fileInput.name = 'file'+(maxValue-i)
+                fileInput.id = string+"_file"+(maxValue-i)
+                const linkInput = document.getElementById(string+'_link'+(maxValue-(i-1)))
+                linkInput.name = 'link'+(maxValue-i)
+                linkInput.setAttribute('onchange', "newurl('"+string+"',"+(maxValue-i)+")")
+                linkInput.id = string+"_link"+(maxValue-i)
+                const delbtn = document.getElementById(string+'_delbtn'+(maxValue-(i-1)))
+                delbtn.setAttribute('onclick', "deleteimage('"+string+"',"+(maxValue-i)+")")
+                delbtn.id = string+"_delbtn"+(maxValue-i)
+            }
+            document.getElementById(string+'_image_total').setAttribute('value', maxValue-afterNum)
+        }
+    } else{
+        xhr = new XMLHttpRequest()
+        xhr.open('POST', './classes/inc/delete.inc.php')
+        xhr.onload = function(){
+            if(this.status == 200){
+                const text = JSON.parse(this.responseText)
+
+            }
+        }
+        xhr.send('role='+string+'&id='+number);
     }
 }
